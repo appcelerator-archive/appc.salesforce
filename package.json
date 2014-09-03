@@ -1,0 +1,26 @@
+{
+  "name": "appc.sfdc",
+  "description": "Salesforce Connector",
+  "version": "1.0.0",
+  "author": "Jeff Haynie",
+  "license": "",
+  "framework": "none",
+  "keywords": [
+    "mobware",
+    "mobware-connector"
+  ],
+  "repository": {},
+  "scripts": {
+    "start": "./node_modules/mobware2/bin/mobware2 install && NODE_PATH=$(./node_modules/mobware2/bin/mobware2 npmpath) node ./app.js"
+  },
+  "private": true,
+  "dependencies": {
+    "async": "^0.9.0",
+    "highlight.js": "^8.2.0",
+    "jsforce": "^1.2.1",
+    "lodash": "^2.4.1",
+    "mobware2": "^1.0.0",
+    "pkginfo": "^0.3.0"
+  },
+  "appcelerator": {}
+}

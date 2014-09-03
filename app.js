@@ -55,4 +55,7 @@ server.api(Account);
 // start the server
 server.start(function(){
 	server.logger.info('server started on port', server.port);
+	connector.fetchSchema(function(err,schema){
+		err && server.logger.error(err);
+	});
 });

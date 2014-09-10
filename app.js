@@ -1,7 +1,7 @@
-var Mobware = require('mobware2'),
-		server = new Mobware(),
-		Connector = require('./lib'),
-		connector = new Connector();
+var APIBuilder = require('apibuilder'),
+	server = new APIBuilder(),
+	Connector = require('./lib'),
+	connector = new Connector();
 
 // lifecycle examples
 server.on('starting', function(){
@@ -36,9 +36,8 @@ function APIKeyAuthorization(req, resp, next) {
 
 //--------------------- simple user model ---------------------//
 
-var Account = Mobware.createModel('Account',{
+var Account = APIBuilder.createModel('Account',{
 	fields: {
-		Id: {type:'string', required: true, primary: true},
 		Name: {type:'string', required: false, validator: /[a-zA-Z]{3,}/ },
 		Type: {type: 'string', readonly: true},
 		AccountSource: {type: 'string'}

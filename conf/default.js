@@ -5,7 +5,7 @@ module.exports = {
 	apikey: '0yP9XFSbBxxQeQ2swCyjdm3LHYOahXBk',
 	admin: {
 		enabled: true,
-		prefix: '/mobware'
+		prefix: '/apibuilder'
 	},
 	schemaRefresh: 3.6e+6 //1 hour
 };

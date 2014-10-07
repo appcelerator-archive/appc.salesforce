@@ -1,2 +1,5 @@
 node_modules
 logs
+.DS_Store
+conf/local.js
+conf/schema.json

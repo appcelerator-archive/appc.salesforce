@@ -45,16 +45,17 @@ var Account = APIBuilder.createModel('Account',{
 	connector: connector	// a model level connector
 });
 
+// create a user api from a user model
+server.addModel(Account);
+
 // add an authorization policy for all requests at the server log
 server.authorization = APIKeyAuthorization;
-
-// create a user api from a user model
-server.api(Account);
 
 // start the server
 server.start(function(){
 	server.logger.info('server started on port', server.port);
 	connector.fetchSchema(function(err,schema){
+		server.logger.info('server fetched schema');
 		err && server.logger.error(err);
 	});
 });

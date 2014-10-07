@@ -1,0 +1,149 @@
+var should = require('should'),
+	async = require('async'),
+	Connector = require('../lib'),
+	APIBuilder = require('apibuilder'),
+	Loader = APIBuilder.Loader,
+	config = new Loader('../conf'),
+	connector = new Connector(config),
+	Model;
+
+describe('Connector', function() {
+
+	before(function(next) {
+		Model = APIBuilder.createModel('Account', {
+			fields: {
+				Name: { type: 'string', required: false, validator: /[a-zA-Z]{3,}/ },
+				Type: { type: 'string', readonly: true },
+				AccountSource: { type: 'string' }
+			},
+			connector: connector	// a model level connector
+		});
+
+		should(Model).be.an.object;
+
+		connector.connect(next);
+	});
+
+	after(function(next) {
+		connector.disconnect(next);
+	});
+
+	it('should be able to fetch metadata', function(next) {
+		connector.fetchMetadata(function(err, meta) {
+			should(err).be.not.ok;
+			should(meta).be.an.object;
+			should(Object.keys(meta)).containEql('fields');
+			next();
+		});
+	});
+
+	it('should be able to fetch schema', function(next) {
+		connector.fetchSchema(function(err, schema) {
+			should(err).be.not.ok;
+			should(schema).be.an.object;
+			next();
+		});
+	});
+
+	it('should be able to create instance', function(next) {
+
+		var name = 'Hello world',
+			object = {
+				Name: name
+			};
+
+		Model.create(object, function(err, instance) {
+			should(err).be.not.ok;
+			should(instance).be.an.object;
+			should(instance.getPrimaryKey()).be.a.String;
+			should(instance.Name).equal(name);
+			should(instance.AccountSource).be.ok;
+			instance.delete(next);
+		});
+
+	});
+
+	it('should be able to find an instance by ID', function(next) {
+
+		var name = 'Hello world',
+			object = {
+				Name: name
+			};
+
+		Model.create(object, function(err, instance) {
+			should(err).be.not.ok;
+			should(instance).be.an.object;
+
+			var id = instance.getPrimaryKey();
+			Model.find(id, function(err, instance2) {
+				should(err).be.not.ok;
+				should(instance2).be.an.object;
+				should(instance2.getPrimaryKey()).equal(id);
+				should(instance2.Name).equal(name);
+				should(instance2.AccountSource).be.ok;
+				instance.delete(next);
+			});
+
+		});
+
+	});
+
+	it('should be able to find an instance by field value', function(next) {
+
+		var name = 'Hello world',
+			object = {
+				Name: name
+			};
+
+		Model.create(object, function(err, instance) {
+			should(err).be.not.ok;
+			should(instance).be.an.object;
+
+			var query = { Id: instance.getPrimaryKey(), Name: name };
+			Model.find(query, function(err, coll) {
+				should(err).be.not.ok;
+				should(coll).be.an.object;
+				should(coll.length).be.above(0);
+
+				var instance2 = coll.value()[0];
+				should(instance2.getPrimaryKey()).equal(instance.getPrimaryKey());
+				should(instance2.Name).equal(name);
+				should(instance2.AccountSource).be.ok;
+				instance.delete(next);
+			});
+
+		});
+
+	});
+
+	it('should be able to update an instance', function(next) {
+
+		var name = 'Hello world',
+			object = {
+				Name: name
+			};
+
+		Model.create(object, function(err, instance) {
+			should(err).be.not.ok;
+			should(instance).be.an.object;
+
+			var id = instance.getPrimaryKey();
+			Model.find(id, function(err, instance2) {
+				should(err).be.not.ok;
+
+				instance2.set('Name', 'Goodbye world');
+				instance2.save(function(err, result) {
+					should(err).be.not.ok;
+
+					should(result).be.an.object;
+					should(result.getPrimaryKey()).equal(id);
+					should(result.Name).equal('Goodbye world');
+					instance.delete(next);
+				});
+
+			});
+
+		});
+
+	});
+});

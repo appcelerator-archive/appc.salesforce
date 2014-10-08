@@ -121,6 +121,80 @@ describe('Connector', function() {
 
 	});
 
+	it('should be able to find an instance by field comparison', function(next) {
+
+		var name = 'Hello world',
+			object = {
+				Name: name
+			};
+
+		Model.create(object, function(err, instance) {
+			should(err).be.not.ok;
+			should(instance).be.an.object;
+
+			var query = { Name: { $like: name.split(' ')[0] + '%' } };
+			Model.find(query, function(err, coll) {
+				should(err).be.not.ok;
+				should(coll).be.an.object;
+				should(coll.length).be.above(0);
+				var found = false;
+				for (var i = 0; i < coll.length; i++) {
+					var instance2 = coll[i];
+					if (instance2.getPrimaryKey() === instance.getPrimaryKey()) {
+						found = true;
+						should(instance2.Name).equal(name);
+						should(instance2.AccountSource).be.ok;
+					}
+				}
+				should(found).be.ok;
+				instance.delete(next);
+			});
+
+		});
+
+	});
+
+	it('should be able to sort, limit, skip while finding', function(next) {
+
+		var name = 'Hello world',
+			limit = 3,
+			object = {
+				Name: name
+			};
+
+		Model.create(object, function(err, instance) {
+			should(err).be.not.ok;
+			should(instance).be.an.object;
+
+			var query = {
+				find: { Name: { $like: name.split(' ')[0] + '%' } },
+				fields: { Id: 1, Name: 1 },
+				sort: { Name: 1, Id: -1 },
+				limit: limit,
+				skip: 0
+			};
+			Model.find(query, function(err, coll) {
+				should(err).be.not.ok;
+				should(coll).be.an.object;
+				should(coll.length).be.above(0);
+				should(coll.length).be.below(limit + 1);
+				var found = false;
+				for (var i = 0; i < coll.length; i++) {
+					var instance2 = coll[i];
+					if (instance2.getPrimaryKey() === instance.getPrimaryKey()) {
+						found = true;
+						should(instance2.Name).equal(name);
+						should(instance2.AccountSource).not.be.ok;
+					}
+				}
+				should(found).be.ok;
+				instance.delete(next);
+			});
+
+		});
+
+	});
+
 	it('should be able to update an instance', function(next) {
 
 		var name = 'Hello world',

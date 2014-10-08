@@ -99,16 +99,21 @@ describe('Connector', function() {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 
-			var query = { Id: instance.getPrimaryKey(), Name: name };
+			var query = { Name: name };
 			Model.find(query, function(err, coll) {
 				should(err).be.not.ok;
 				should(coll).be.an.object;
 				should(coll.length).be.above(0);
-
-				var instance2 = coll.value()[0];
-				should(instance2.getPrimaryKey()).equal(instance.getPrimaryKey());
-				should(instance2.Name).equal(name);
-				should(instance2.AccountSource).be.ok;
+				var found = false;
+				for (var i = 0; i < coll.length; i++) {
+					var instance2 = coll[i];
+					if (instance2.getPrimaryKey() === instance.getPrimaryKey()) {
+						found = true;
+						should(instance2.Name).equal(name);
+						should(instance2.AccountSource).be.ok;
+					}
+				}
+				should(found).be.ok;
 				instance.delete(next);
 			});
 

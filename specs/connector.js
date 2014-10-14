@@ -75,7 +75,7 @@ describe('Connector', function() {
 			should(instance).be.an.object;
 
 			var id = instance.getPrimaryKey();
-			Model.find(id, function(err, instance2) {
+			Model.findOne(id, function(err, instance2) {
 				should(err).be.not.ok;
 				should(instance2).be.an.object;
 				should(instance2.getPrimaryKey()).equal(id);
@@ -99,21 +99,10 @@ describe('Connector', function() {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 
-			var query = { Name: name };
-			Model.find(query, function(err, coll) {
+			var options = { where: { Name: name } };
+			Model.query(options, function(err, coll) {
 				should(err).be.not.ok;
-				should(coll).be.an.object;
-				should(coll.length).be.above(0);
-				var found = false;
-				for (var i = 0; i < coll.length; i++) {
-					var instance2 = coll[i];
-					if (instance2.getPrimaryKey() === instance.getPrimaryKey()) {
-						found = true;
-						should(instance2.Name).equal(name);
-						should(instance2.AccountSource).be.ok;
-					}
-				}
-				should(found).be.ok;
+				shouldContain(coll, instance);
 				instance.delete(next);
 			});
 
@@ -132,21 +121,10 @@ describe('Connector', function() {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 
-			var query = { Name: { $like: name.split(' ')[0] + '%' } };
-			Model.find(query, function(err, coll) {
+			var options = { where: { Name: { $like: name.split(' ')[0] + '%' } } };
+			Model.query(options, function(err, coll) {
 				should(err).be.not.ok;
-				should(coll).be.an.object;
-				should(coll.length).be.above(0);
-				var found = false;
-				for (var i = 0; i < coll.length; i++) {
-					var instance2 = coll[i];
-					if (instance2.getPrimaryKey() === instance.getPrimaryKey()) {
-						found = true;
-						should(instance2.Name).equal(name);
-						should(instance2.AccountSource).be.ok;
-					}
-				}
-				should(found).be.ok;
+				shouldContain(coll, instance);
 				instance.delete(next);
 			});
 
@@ -166,28 +144,17 @@ describe('Connector', function() {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 
-			var query = {
-				find: { Name: { $like: name.split(' ')[0] + '%' } },
-				fields: { Id: 1, Name: 1 },
-				sort: { Name: 1, Id: -1 },
+			var options = {
+				where: { Name: { $like: name.split(' ')[0] + '%' } },
+				sel: { Id: 1, Name: 1 },
+				order: { Name: 1, Id: -1 },
 				limit: limit,
 				skip: 0
 			};
-			Model.find(query, function(err, coll) {
+			Model.query(options, function(err, coll) {
 				should(err).be.not.ok;
-				should(coll).be.an.object;
-				should(coll.length).be.above(0);
 				should(coll.length).be.below(limit + 1);
-				var found = false;
-				for (var i = 0; i < coll.length; i++) {
-					var instance2 = coll[i];
-					if (instance2.getPrimaryKey() === instance.getPrimaryKey()) {
-						found = true;
-						should(instance2.Name).equal(name);
-						should(instance2.AccountSource).not.be.ok;
-					}
-				}
-				should(found).be.ok;
+				shouldContain(coll, instance);
 				instance.delete(next);
 			});
 
@@ -207,7 +174,7 @@ describe('Connector', function() {
 			should(instance).be.an.object;
 
 			var id = instance.getPrimaryKey();
-			Model.find(id, function(err, instance2) {
+			Model.findOne(id, function(err, instance2) {
 				should(err).be.not.ok;
 
 				instance2.set('Name', 'Goodbye world');
@@ -225,4 +192,22 @@ describe('Connector', function() {
 		});
 
 	});
+
+	/*
+	 Utility.
+	 */
+
+	function shouldContain(coll, instance) {
+		should(coll).be.an.object;
+		should(coll.length).be.above(0);
+		var found = false;
+		for (var i = 0; i < coll.length; i++) {
+			var instance2 = coll[i];
+			if (instance2.getPrimaryKey() === instance.getPrimaryKey()) {
+				found = true;
+				should(instance2.Name).equal(instance.Name);
+			}
+		}
+		should(found).be.ok;
+	}
 });

@@ -3,6 +3,7 @@ module.exports = {
 	quiet: false,
 	logLevel: 'debug',
 	apikey: '0yP9XFSbBxxQeQ2swCyjdm3LHYOahXBk',
+	requireSessionLogin: false,
 	admin: {
 		enabled: true,
 		prefix: '/apibuilder'

@@ -75,7 +75,7 @@ describe('Connector', function() {
 			should(instance).be.an.object;
 
 			var id = instance.getPrimaryKey();
-			Model.findOne(id, function(err, instance2) {
+			Model.find(id, function(err, instance2) {
 				should(err).be.not.ok;
 				should(instance2).be.an.object;
 				should(instance2.getPrimaryKey()).equal(id);
@@ -99,8 +99,8 @@ describe('Connector', function() {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 
-			var options = { where: { Name: name } };
-			Model.query(options, function(err, coll) {
+			var options = { Name: name };
+			Model.find(options, function(err, coll) {
 				should(err).be.not.ok;
 				shouldContain(coll, instance);
 				instance.delete(next);

@@ -21,11 +21,15 @@ describe('Connector', function() {
 
 		should(Model).be.an.object;
 
-		connector.connect(next);
+		connector.connect(function () {
+			deleteTestData(next);
+		});
 	});
 
 	after(function(next) {
-		connector.disconnect(next);
+		deleteTestData(function() {
+			connector.disconnect(next);
+		});
 	});
 
 	it('should be able to fetch metadata', function(next) {
@@ -47,7 +51,7 @@ describe('Connector', function() {
 
 	it('should be able to create instance', function(next) {
 
-		var name = 'Hello world',
+		var name = 'TEST: Hello world',
 			object = {
 				Name: name
 			};
@@ -65,7 +69,7 @@ describe('Connector', function() {
 
 	it('should be able to find an instance by ID', function(next) {
 
-		var name = 'Hello world',
+		var name = 'TEST: Hello world',
 			object = {
 				Name: name
 			};
@@ -90,7 +94,7 @@ describe('Connector', function() {
 
 	it('should be able to find an instance by field value', function(next) {
 
-		var name = 'Hello world',
+		var name = 'TEST: Hello world',
 			object = {
 				Name: name
 			};
@@ -112,7 +116,7 @@ describe('Connector', function() {
 
 	it('should be able to find an instance by field comparison', function(next) {
 
-		var name = 'Hello world',
+		var name = 'TEST: Hello world',
 			object = {
 				Name: name
 			};
@@ -134,7 +138,7 @@ describe('Connector', function() {
 
 	it('should be able to sort, limit, skip while finding', function(next) {
 
-		var name = 'Hello world',
+		var name = 'TEST: Hello world',
 			limit = 3,
 			object = {
 				Name: name
@@ -145,9 +149,9 @@ describe('Connector', function() {
 			should(instance).be.an.object;
 
 			var options = {
-				where: { Name: { $like: name.split(' ')[0] + '%' } },
+				where: { Name: { $like: 'TEST: Hello %' } },
 				sel: { Id: 1, Name: 1 },
-				order: { Name: 1, Id: -1 },
+				order: { Id: 1, Name: 1 },
 				limit: limit,
 				skip: 0
 			};
@@ -164,7 +168,7 @@ describe('Connector', function() {
 
 	it('should be able to update an instance', function(next) {
 
-		var name = 'Hello world',
+		var name = 'TEST: Hello world',
 			object = {
 				Name: name
 			};
@@ -177,13 +181,14 @@ describe('Connector', function() {
 			Model.findOne(id, function(err, instance2) {
 				should(err).be.not.ok;
 
-				instance2.set('Name', 'Goodbye world');
+				var newName = 'TEST: Goodbye world';
+				instance2.set('Name', newName);
 				instance2.save(function(err, result) {
 					should(err).be.not.ok;
 
 					should(result).be.an.object;
 					should(result.getPrimaryKey()).equal(id);
-					should(result.Name).equal('Goodbye world');
+					should(result.Name).equal(newName);
 					instance.delete(next);
 				});
 
@@ -196,6 +201,17 @@ describe('Connector', function() {
 	/*
 	 Utility.
 	 */
+
+	function deleteTestData(next) {
+		Model.find({ where: { Name: { $like: 'TEST: %' } }, limit: 100 }, function(err, coll) {
+			should(err).be.not.ok;
+			async.eachSeries(coll, function(instance, proceed) {
+				instance.delete(proceed);
+			}, function () {
+				next();
+			});
+		});
+	}
 
 	function shouldContain(coll, instance) {
 		should(coll).be.an.object;

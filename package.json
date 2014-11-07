@@ -1,5 +1,5 @@
 {
-	"name": "appc.sfdc",
+	"name": "appc.salesforce",
 	"description": "Salesforce Connector",
 	"version": "1.0.0",
 	"author": "Jeff Haynie",

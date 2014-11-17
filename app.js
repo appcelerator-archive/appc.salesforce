@@ -1,6 +1,6 @@
 var APIBuilder = require('apibuilder'),
 	server = new APIBuilder(),
-	Connector = require('./lib'),
+	Connector = require('./lib').create(APIBuilder),
 	connector = new Connector();
 
 // lifecycle examples
@@ -36,7 +36,7 @@ function APIKeyAuthorization(req, resp, next) {
 
 //--------------------- simple user model ---------------------//
 
-var Account = APIBuilder.createModel('Account',{
+var Account = APIBuilder.Model.extend('Account',{
 	fields: {
 		Name: {type:'string', required: false, validator: /[a-zA-Z]{3,}/ },
 		Type: {type: 'string', readonly: true},

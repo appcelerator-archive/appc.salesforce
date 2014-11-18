@@ -1,6 +1,7 @@
 var APIBuilder = require('apibuilder'),
 	server = new APIBuilder(),
-	Connector = require('./lib'),
+	ConnectorFactory = require('./lib'),
+	Connector = ConnectorFactory.create(APIBuilder, server),
 	connector = new Connector();
 
 // lifecycle examples

@@ -8,5 +8,11 @@ module.exports = {
 		enabled: true,
 		prefix: '/apibuilder'
 	},
-	schemaRefresh: 3.6e+6 //1 hour
+	schemaRefresh: 3.6e+6, //1 hour
+
+	// set these for your salesforce instance
+	url: 'https://test.salesforce.com',
+	username: '',
+	password: '',
+	token:''
 };

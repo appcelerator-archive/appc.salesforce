@@ -1,17 +1,14 @@
 var should = require('should'),
 	async = require('async'),
-	ConnectorFactory = require('../lib'),
 	APIBuilder = require('apibuilder'),
-	Connector = ConnectorFactory.create(APIBuilder),
-	Loader = APIBuilder.Loader,
-	config = new Loader('../conf'),
-	connector = new Connector(config),
+	Connector = require('../lib').create(APIBuilder),
+	connector = new Connector(),
 	Model;
 
 describe('Connector', function() {
 
 	before(function(next) {
-		Model = APIBuilder.createModel('Account', {
+		Model = APIBuilder.Model.extend('Account', {
 			fields: {
 				Name: { type: 'string', required: false, validator: /[a-zA-Z]{3,}/ },
 				Type: { type: 'string', readonly: true },

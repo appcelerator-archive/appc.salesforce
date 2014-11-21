@@ -19,7 +19,7 @@ describe('Connector', function() {
 
 		should(Model).be.an.object;
 
-		connector.connect(function () {
+		connector.connect(function() {
 			deleteTestData(next);
 		});
 	});
@@ -60,6 +60,29 @@ describe('Connector', function() {
 			should(instance.getPrimaryKey()).be.a.String;
 			should(instance.Name).equal(name);
 			should(instance.AccountSource).be.ok;
+			instance.delete(next);
+		});
+
+	});
+
+	it('should be able to map fields', function(next) {
+
+		var Model = APIBuilder.Model.extend('Account', {
+			fields: {
+				SuperName: { name: 'Name', type: String }
+			},
+			connector: connector	// a model level connector
+		});
+		var name = 'TEST: Hello world',
+			object = {
+				SuperName: name
+			};
+
+		Model.create(object, function(err, instance) {
+			console.log(instance);
+			should(err).be.not.ok;
+			should(instance).be.an.object;
+			should(instance.SuperName).equal(name);
 			instance.delete(next);
 		});
 
@@ -205,7 +228,7 @@ describe('Connector', function() {
 			should(err).be.not.ok;
 			async.eachSeries(coll, function(instance, proceed) {
 				instance.delete(proceed);
-			}, function () {
+			}, function() {
 				next();
 			});
 		});

@@ -79,7 +79,6 @@ describe('Connector', function() {
 			};
 
 		Model.create(object, function(err, instance) {
-			console.log(instance);
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 			should(instance.SuperName).equal(name);

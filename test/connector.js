@@ -1,6 +1,6 @@
 var should = require('should'),
 	async = require('async'),
-	APIBuilder = require('apibuilder'),
+	APIBuilder = require('appcelerator').apibuilder,
 	Connector = require('../lib').create(APIBuilder),
 	connector = new Connector(),
 	Model;

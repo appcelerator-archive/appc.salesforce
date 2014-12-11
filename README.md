@@ -38,7 +38,7 @@ var Account = APIBuilder.createModel('account',{
 	},
 	connector: 'appc.salesforce',
 	metadata: {
-		salesforce: {
+		'appc.salesforce': {
 			object: 'Account'
 		}
 	}

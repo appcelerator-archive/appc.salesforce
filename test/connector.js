@@ -1,8 +1,8 @@
 var should = require('should'),
 	async = require('async'),
 	APIBuilder = require('appcelerator').apibuilder,
-	Connector = require('../lib').create(APIBuilder),
-	connector = new Connector(),
+	server = new APIBuilder(),
+	connector = server.getConnector('appc.salesforce'),
 	Model;
 
 describe('Connector', function() {
@@ -14,20 +14,16 @@ describe('Connector', function() {
 				Type: { type: String, readonly: true },
 				AccountSource: { type: String }
 			},
-			connector: connector	// a model level connector
+			connector: 'appc.salesforce'
 		});
 
 		should(Model).be.an.object;
 
-		connector.connect(function() {
-			deleteTestData(next);
-		});
+		deleteTestData(next);
 	});
 
 	after(function(next) {
-		deleteTestData(function() {
-			connector.disconnect(next);
-		});
+		deleteTestData(next);
 	});
 
 	it('should be able to fetch metadata', function(next) {
@@ -71,7 +67,7 @@ describe('Connector', function() {
 			fields: {
 				SuperName: { name: 'Name', type: String }
 			},
-			connector: connector	// a model level connector
+			connector: 'appc.salesforce'
 		});
 		var name = 'TEST: Hello world',
 			object = {

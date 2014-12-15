@@ -4,9 +4,7 @@
  */
 var APIBuilder = require('appcelerator').apibuilder,
 	server = new APIBuilder(),
-	ConnectorFactory = require('./lib'),
-	Connector = ConnectorFactory.create(APIBuilder, server),
-	connector = new Connector();
+	connector = server.getConnector('appc.salesforce');
 
 // lifecycle examples
 server.on('starting', function(){
@@ -47,7 +45,7 @@ var Account = APIBuilder.Model.extend('Account',{
 		Type: { type: String, readonly: true },
 		AccountSource: { type: String }
 	},
-	connector: connector	// a model level connector
+	connector: 'appc.salesforce'
 });
 
 // create a user api from a user model
@@ -57,7 +55,10 @@ server.addModel(Account);
 server.authorization = APIKeyAuthorization;
 
 // start the server
-server.start(function(){
+server.start(function(err) {
+	if (err) {
+		return server.logger.fatal(err);
+	}
 	server.logger.info('server started on port', server.port);
 	connector.fetchSchema(function(err,schema){
 		server.logger.info('server fetched schema');

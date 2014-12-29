@@ -43,6 +43,11 @@ describe('Connector', function() {
 		});
 	});
 
+	it('should create models from schema', function() {
+		var Contract = connector.getModel('appc.salesforce/Contract');
+		should(Contract).be.ok;
+	});
+
 	it('should be able to create instance', function(next) {
 
 		var name = 'TEST: Hello world',

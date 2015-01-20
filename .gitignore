@@ -4,3 +4,4 @@ logs
 conf/local.js
 conf/schema.json
 *.tgz
+*.log

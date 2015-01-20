@@ -66,6 +66,17 @@ describe('Connector', function() {
 
 	});
 
+	it('should be able to findAll', function(next) {
+
+		Model.findAll(function(err, coll) {
+			should(err).be.not.ok;
+			should(coll).be.ok;
+			should(coll.length).be.within(1, 1000);
+			next();
+		});
+
+	});
+
 	it('should be able to map fields', function(next) {
 
 		var Model = APIBuilder.Model.extend('Account', {

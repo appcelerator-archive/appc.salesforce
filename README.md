@@ -21,7 +21,7 @@ You need to set the following configuration:
 Now reference the connector in your model.
 
 ```javascript
-var Account = APIBuilder.createModel('Account',{
+var Account = Arrow.createModel('Account',{
 	fields: {
 		Name: { type: String, required: true, validator: /[a-zA-Z]{3,}/ }
 	},
@@ -32,7 +32,7 @@ var Account = APIBuilder.createModel('Account',{
 If you want to map a specific model to a specific sobject name, use metadata.  For example, to map the `account` model to the sobject `Account`, set it such as:
 
 ```javascript
-var Account = APIBuilder.createModel('account',{
+var Account = Arrow.createModel('account',{
 	fields: {
 		Name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ }
 	},

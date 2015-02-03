@@ -1,14 +1,14 @@
 var should = require('should'),
 	async = require('async'),
-	APIBuilder = require('appcelerator').apibuilder,
-	server = new APIBuilder(),
+	Arrow = require('appcelerator').arrow,
+	server = new Arrow(),
 	connector = server.getConnector('appc.salesforce'),
 	Model;
 
 describe('Connector', function() {
 
 	before(function(next) {
-		Model = APIBuilder.Model.extend('Account', {
+		Model = Arrow.Model.extend('Account', {
 			fields: {
 				Name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ },
 				Type: { type: String, readonly: true },
@@ -79,7 +79,7 @@ describe('Connector', function() {
 
 	it('should be able to map fields', function(next) {
 
-		var Model = APIBuilder.Model.extend('Account', {
+		var Model = Arrow.Model.extend('Account', {
 			fields: {
 				SuperName: { name: 'Name', type: String }
 			},

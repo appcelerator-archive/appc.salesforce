@@ -2,11 +2,11 @@
  * NOTE: This file is simply for testing this connector and will not
  * be used or packaged with the actual connector when published.
  */
-var APIBuilder = require('appcelerator').apibuilder,
-	server = new APIBuilder(),
+var Arrow = require('appcelerator').arrow,
+	server = new Arrow(),
 	connector = server.getConnector('appc.salesforce');
 
-var Account = APIBuilder.Model.extend('Account', {
+var Account = Arrow.Model.extend('Account', {
 	fields: {
 		Name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ },
 		Type: { type: String, readonly: true },

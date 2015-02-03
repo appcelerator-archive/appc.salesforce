@@ -6,7 +6,7 @@ module.exports = {
 	requireSessionLogin: false,
 	admin: {
 		enabled: true,
-		prefix: '/apibuilder'
+		prefix: '/arrow'
 	},
 	schemaRefresh: 3.6e+6, //1 hour
 

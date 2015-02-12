@@ -38,5 +38,6 @@
 		"grunt-mocha-test": "^0.12.0",
 		"mocha": "^1.21.4",
 		"should": "^4.0.4"
-	}
+	},
+    "appc_access":"public"
 }

@@ -1,6 +1,6 @@
 var should = require('should'),
 	async = require('async'),
-	Arrow = require('appcelerator').arrow,
+	Arrow = require('arrow.js'),
 	server = new Arrow(),
 	connector = server.getConnector('appc.salesforce'),
 	Model;

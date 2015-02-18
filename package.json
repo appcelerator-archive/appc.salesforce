@@ -1,7 +1,7 @@
 {
 	"name": "appc.salesforce",
 	"description": "Salesforce connector",
-	"version": "1.0.26",
+	"version": "1.0.27",
 	"author": "Jeff Haynie",
 	"license": "",
 	"framework": "none",
@@ -30,7 +30,7 @@
 		"pkginfo": "^0.3.0"
 	},
 	"devDependencies": {
-		"arrow.js": "*",
+		"arrow": "*",
 		"grunt": "^0.4.5",
 		"grunt-contrib-clean": "^0.6.0",
 		"grunt-contrib-jshint": "^0.10.0",

@@ -18,6 +18,7 @@ describe('Connector', function() {
 		});
 
 		should(Model).be.an.object;
+		should(Model.generated).be.false;
 
 		deleteTestData(next);
 	});
@@ -46,6 +47,7 @@ describe('Connector', function() {
 	it('should create models from schema', function() {
 		var Contract = connector.getModel('appc.salesforce/Contract');
 		should(Contract).be.ok;
+		should(Contract.generated).be.true;
 	});
 
 	it('should be able to create instance', function(next) {

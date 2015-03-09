@@ -7,6 +7,5 @@ Gruntfile.js
 test
 .travis.yml
 .jshintrc
-appc.json
 app.js
 conf/local.js

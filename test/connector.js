@@ -1,5 +1,7 @@
 var should = require('should'),
+	assert = require('assert'),
 	async = require('async'),
+	request = require('request'),
 	Arrow = require('arrow'),
 	server = new Arrow(),
 	connector = server.getConnector('appc.salesforce'),
@@ -244,16 +246,114 @@ describe('Connector', function() {
 		});
 	});
 
+	it('API-30: should support per-request auth', function (callback) {
+		connector.config.requireSessionLogin = true;
+		var auth = {
+				user: server.config.apikey,
+				password: ''
+			},
+			accessToken;
+
+		async.series([
+			function startTheServer(cb) {
+				server.start(function (err) {
+					assert.ifError(err);
+					cb();
+				});
+			},
+			function makeSureAuthIsRequired(cb) {
+				request({
+					method: 'GET',
+					uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
+					auth: auth,
+					json: true
+				}, function (err, response, body) {
+					should(body.success).be.false;
+					should(body.message).containEql('Authentication is required. Please pass these headers:');
+					cb();
+				});
+			},
+			function passInvalidAccessToken(cb) {
+				request({
+					method: 'GET',
+					uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
+					auth: auth,
+					headers: {
+						accessToken: 'bad-access-token!'
+					},
+					json: true
+				}, function (err, response, body) {
+					should(body.success).be.false;
+					should(body.message).containEql('Authentication is required. Please pass these headers:');
+					cb();
+				});
+			},
+			function passInvalidAuth(cb) {
+				request({
+					method: 'GET',
+					uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
+					auth: auth,
+					headers: {
+						user: 'bad-user!',
+						pass: 'bad-pass!',
+						token: 'go to your room!'
+					},
+					json: true
+				}, function (err, response, body) {
+					should(body.success).be.false;
+					should(body.message).containEql('INVALID_LOGIN: Invalid username, password, security token');
+					cb();
+				});
+			},
+			function passGoodAuth(cb) {
+				request({
+					method: 'GET',
+					uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
+					auth: auth,
+					headers: {
+						user: connector.config.username,
+						pass: connector.config.password,
+						token: connector.config.token
+					},
+					json: true
+				}, function (err, response, body) {
+					should(body.success).be.true;
+					should(response.headers.accessToken).be.ok;
+					accessToken = response.headers.accessToken;
+					cb();
+				});
+			},
+			function passGoodAccessToken(cb) {
+				request({
+					method: 'GET',
+					uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
+					auth: auth,
+					headers: {
+						accessToken: accessToken
+					},
+					json: true
+				}, function (err, response, body) {
+					should(body.success).be.true;
+					cb();
+				});
+			}
+		], callback);
+
+	});
+
 	/*
 	 Utility.
 	 */
 
 	function deleteTestData(next) {
+		var temp = connector.config.requireSessionLogin;
+		connector.config.requireSessionLogin = false;
 		Model.find({ where: { Name: { $like: 'TEST: %' } }, limit: 100 }, function(err, coll) {
 			should(err).be.not.ok;
 			async.eachSeries(coll, function(instance, proceed) {
 				instance.delete(proceed);
 			}, function() {
+				connector.config.requireSessionLogin = temp;
 				next();
 			});
 		});

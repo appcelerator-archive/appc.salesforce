@@ -5,7 +5,8 @@ module.exports = {
 	apikey: '0yP9XFSbBxxQeQ2swCyjdm3LHYOahXBk',
 	requireSessionLogin: false,
 	admin: {
-		enabled: true,
+		enabled: false,
+		disableAutoLogin: true,
 		prefix: '/arrow'
 	},
 	schemaRefresh: 3.6e+6, //1 hour

@@ -10,7 +10,9 @@ module.exports = {
 			url: 'https://test.salesforce.com/',
 			username: 'your_salesforce_username',
 			password: 'your_salesforce_password',
-			token: 'your_salesforce_token'
+			token: 'your_salesforce_token',
+
+			generateModelsFromSchema: true // Generate models from your schema.
 		}
 	}
 };

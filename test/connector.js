@@ -13,8 +13,7 @@ describe('Connector', function() {
 		Model = Arrow.Model.extend('Account', {
 			fields: {
 				Name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ },
-				Type: { type: String, readonly: true },
-				AccountSource: { type: String }
+				Type: { type: String, readonly: true }
 			},
 			connector: 'appc.salesforce'
 		});
@@ -61,10 +60,9 @@ describe('Connector', function() {
 
 		Model.create(object, function(err, instance) {
 			should(err).be.not.ok;
-			should(instance).be.an.object;
+			should(instance).be.an.Object;
 			should(instance.getPrimaryKey()).be.a.String;
 			should(instance.Name).equal(name);
-			should(instance.AccountSource).be.ok;
 			instance.delete(next);
 		});
 
@@ -120,7 +118,6 @@ describe('Connector', function() {
 				should(instance2).be.an.object;
 				should(instance2.getPrimaryKey()).equal(id);
 				should(instance2.Name).equal(name);
-				should(instance2.AccountSource).be.ok;
 				instance.delete(next);
 			});
 
@@ -246,98 +243,106 @@ describe('Connector', function() {
 		});
 	});
 
-	it('API-30: should support per-request auth', function (callback) {
-		connector.config.requireSessionLogin = true;
+	describe('API-30: per-request auth', function () {
 		var auth = {
 				user: server.config.apikey,
 				password: ''
 			},
-			accessToken;
+			accessToken,
+			instanceUrl;
 
-		async.series([
-			function startTheServer(cb) {
-				server.start(function (err) {
-					assert.ifError(err);
-					cb();
-				});
-			},
-			function makeSureAuthIsRequired(cb) {
-				request({
-					method: 'GET',
-					uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
-					auth: auth,
-					json: true
-				}, function (err, response, body) {
-					should(body.success).be.false;
-					should(body.message).containEql('Authentication is required. Please pass these headers:');
-					cb();
-				});
-			},
-			function passInvalidAccessToken(cb) {
-				request({
-					method: 'GET',
-					uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
-					auth: auth,
-					headers: {
-						accessToken: 'bad-access-token!'
-					},
-					json: true
-				}, function (err, response, body) {
-					should(body.success).be.false;
-					should(body.message).containEql('Authentication is required. Please pass these headers:');
-					cb();
-				});
-			},
-			function passInvalidAuth(cb) {
-				request({
-					method: 'GET',
-					uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
-					auth: auth,
-					headers: {
-						user: 'bad-user!',
-						pass: 'bad-pass!',
-						token: 'go to your room!'
-					},
-					json: true
-				}, function (err, response, body) {
-					should(body.success).be.false;
-					should(body.message).containEql('INVALID_LOGIN: Invalid username, password, security token');
-					cb();
-				});
-			},
-			function passGoodAuth(cb) {
-				request({
-					method: 'GET',
-					uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
-					auth: auth,
-					headers: {
-						user: connector.config.username,
-						pass: connector.config.password,
-						token: connector.config.token
-					},
-					json: true
-				}, function (err, response, body) {
-					should(body.success).be.true;
-					should(response.headers.accessToken).be.ok;
-					accessToken = response.headers.accessToken;
-					cb();
-				});
-			},
-			function passGoodAccessToken(cb) {
-				request({
-					method: 'GET',
-					uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
-					auth: auth,
-					headers: {
-						accessToken: accessToken
-					},
-					json: true
-				}, function (err, response, body) {
-					should(body.success).be.true;
-					cb();
-				});
-			}
-		], callback);
+		before(function (cb) {
+			connector.config.requireSessionLogin = true;
+
+			server.start(function (err) {
+				assert.ifError(err);
+				cb();
+			});
+		});
+
+		it('should make sure auth is required', function makeSureAuthIsRequired(cb) {
+			request({
+				method: 'GET',
+				uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
+				auth: auth,
+				json: true
+			}, function (err, response, body) {
+				should(body.success).be.false;
+				should(body.message).containEql('Authentication is required. Please pass these headers:');
+				cb();
+			});
+		});
+
+		it('should pass with valid auth params', function passGoodAuth(cb) {
+			request({
+				method: 'GET',
+				uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
+				auth: auth,
+				headers: {
+					user: connector.config.username,
+					pass: connector.config.password,
+					token: connector.config.token
+				},
+				json: true
+			}, function (err, response, body) {
+				should(body.success).be.true;
+				should(response.headers.accesstoken).be.ok;
+				accessToken = response.headers.accesstoken;
+				instanceUrl = response.headers.instanceurl;
+				cb();
+			});
+		});
+
+		it('should pass with valid access token', function passGoodAccessToken(cb) {
+			request({
+				method: 'GET',
+				uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
+				auth: auth,
+				headers: {
+					accessToken: accessToken,
+					instanceUrl: instanceUrl
+				},
+				json: true
+			}, function (err, response, body) {
+				should(body.success).be.true;
+				cb();
+			});
+		});
+
+		it('should error with invalid access token', function passInvalidAccessToken(cb) {
+			request({
+				method: 'GET',
+				uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
+				auth: auth,
+				headers: {
+					accessToken: 'bad-access-token!',
+					instanceUrl: instanceUrl
+				},
+				json: true
+			}, function (err, response, body) {
+				should(body.success).be.false;
+				should(body.message).containEql('Session expired or invalid');
+				cb();
+			});
+		});
+
+		it('should error with invalid auth params', function passInvalidAuth(cb) {
+			request({
+				method: 'GET',
+				uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
+				auth: auth,
+				headers: {
+					user: 'bad-user!',
+					pass: 'bad-pass!',
+					token: 'go to your room!'
+				},
+				json: true
+			}, function (err, response, body) {
+				should(body.success).be.false;
+				should(body.message).containEql('INVALID_LOGIN: Invalid username, password, security token');
+				cb();
+			});
+		});
 
 	});
 

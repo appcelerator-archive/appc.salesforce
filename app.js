@@ -9,8 +9,7 @@ var Arrow = require('arrow'),
 var Account = Arrow.Model.extend('Account', {
 	fields: {
 		Name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ },
-		Type: { type: String, readonly: true },
-		AccountSource: { type: String }
+		Type: { type: String, readonly: true }
 	},
 	connector: 'appc.salesforce'
 });

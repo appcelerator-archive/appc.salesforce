@@ -40,7 +40,7 @@ describe('Connector', function() {
 	it('should be able to fetch schema', function(next) {
 		connector.fetchSchema(function(err, schema) {
 			should(err).be.not.ok;
-			should(schema).be.an.object;
+			should(schema).be.an.Object;
 			next();
 		});
 	});
@@ -241,6 +241,33 @@ describe('Connector', function() {
 				callback();
 			});
 		});
+	});
+	
+	it('API-594: should error transparently when you try to $like query on a textarea', function (callback) {
+		var Model = Arrow.createModel('salesforce__c', {
+			fields: {
+				fname: { type: String, required: true, name: 'First_Name__c' },
+				lname: { type: String, required: true, name: 'Last_Name__c' },
+				email: { type: String, required: true, name: 'Email__c' }
+			},
+			connector: 'appc.salesforce'
+		});
+		Model.create([
+			{ fname: 'Fergie', lname: 'Flintstone', email: 'fergie@flintstones.com' },
+			{ fname: 'Wally', lname: 'West', email: 'flash@centralcity.com' },
+			{ fname: 'Bruce', lname: 'Wayne', email: 'batman@gotham.com' }
+		], created);
+
+		function created(err) {
+			should(err).be.not.ok;
+			Model.query({ where: { fname: { $like: "%a%" } } }, queried);
+		}
+
+		function queried(err) {
+			should(err).be.ok;
+			should(err).containEql('can not be filtered in query call');
+			callback();
+		}
 	});
 
 	describe('API-30: per-request auth', function () {

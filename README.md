@@ -1,10 +1,8 @@
 # Salesforce Connector
 
-> This software is pre-release and not yet ready for usage.  Please don't use this just yet while we're working through testing and finishing it up. Once it's ready, we'll make an announcement about it.
-
 This is an Arrow connector to Salesforce.
 
-To install:
+## Installation
 
 ```bash
 $ appc install connector/appc.salesforce --save
@@ -17,8 +15,9 @@ You need to set the following configuration:
 - *password* Login password
 - *token* Login token
 
+## Usage
 
-Now reference the connector in your model.
+Reference the connector in your model.
 
 ```javascript
 var Account = Arrow.createModel('Account',{
@@ -44,6 +43,23 @@ var Account = Arrow.createModel('account',{
 	}
 });
 ```
+
+## Development
+
+> This section is for individuals developing the Salesforce Connector and not intended
+  for end-users.
+
+```bash
+npm install
+node app.js
+```
+
+### Running Unit Tests
+
+```bash
+npm test
+```
+
 
 # Contributing
 

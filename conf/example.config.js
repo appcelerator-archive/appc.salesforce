@@ -11,7 +11,8 @@ module.exports = {
 			username: 'your_salesforce_username',
 			password: 'your_salesforce_password',
 			token: 'your_salesforce_token',
-
+			version: '26.0' //API version needed if not latest ,
+			
 			generateModelsFromSchema: true // Generate models from your schema.
 		}
 	}

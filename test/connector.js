@@ -1,19 +1,19 @@
-var should = require('should'),
+/* global Arrow, connector, server */
+var base = require('./_base'),
+	should = require('should'),
 	assert = require('assert'),
 	async = require('async'),
 	request = require('request'),
-	Arrow = require('arrow'),
-	server = new Arrow(),
-	connector = server.getConnector('appc.salesforce'),
-	Model;
+	path = require('path');
 
-describe('Connector', function() {
+describe('Connector', function () {
+	var Model;
 
-	before(function(next) {
+	before(function (next) {
 		Model = Arrow.Model.extend('Account', {
 			fields: {
-				Name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ },
-				Type: { type: String, readonly: true }
+				Name: {type: String, required: false, validator: /[a-zA-Z]{3,}/},
+				Type: {type: String, readonly: true}
 			},
 			connector: 'appc.salesforce'
 		});
@@ -24,12 +24,12 @@ describe('Connector', function() {
 		deleteTestData(next);
 	});
 
-	after(function(next) {
+	after(function (next) {
 		deleteTestData(next);
 	});
 
-	it('should be able to fetch metadata', function(next) {
-		connector.fetchMetadata(function(err, meta) {
+	it('should be able to fetch metadata', function (next) {
+		connector.fetchMetadata(function (err, meta) {
 			should(err).be.not.ok;
 			should(meta).be.an.object;
 			should(Object.keys(meta)).containEql('fields');
@@ -37,28 +37,28 @@ describe('Connector', function() {
 		});
 	});
 
-	it('should be able to fetch schema', function(next) {
-		connector.fetchSchema(function(err, schema) {
+	it('should be able to fetch schema', function (next) {
+		connector.fetchSchema(function (err, schema) {
 			should(err).be.not.ok;
 			should(schema).be.an.Object;
 			next();
 		});
 	});
 
-	it('should create models from schema', function() {
+	it('should create models from schema', function () {
 		var Contract = connector.getModel('appc.salesforce/Contract');
 		should(Contract).be.ok;
 		should(Contract.generated).be.true;
 	});
 
-	it('should be able to create instance', function(next) {
+	it('should be able to create instance', function (next) {
 
 		var name = 'TEST: Hello world',
 			object = {
 				Name: name
 			};
 
-		Model.create(object, function(err, instance) {
+		Model.create(object, function (err, instance) {
 			should(err).be.not.ok;
 			should(instance).be.an.Object;
 			should(instance.getPrimaryKey()).be.a.String;
@@ -68,9 +68,9 @@ describe('Connector', function() {
 
 	});
 
-	it('should be able to findAll', function(next) {
+	it('should be able to findAll', function (next) {
 
-		Model.findAll(function(err, coll) {
+		Model.findAll(function (err, coll) {
 			should(err).be.not.ok;
 			should(coll).be.ok;
 			should(coll.length).be.within(1, 1000);
@@ -79,11 +79,11 @@ describe('Connector', function() {
 
 	});
 
-	it('should be able to map fields', function(next) {
+	it('should be able to map fields', function (next) {
 
 		var Model = Arrow.Model.extend('Account', {
 			fields: {
-				SuperName: { name: 'Name', type: String }
+				SuperName: {name: 'Name', type: String}
 			},
 			connector: 'appc.salesforce'
 		});
@@ -92,7 +92,7 @@ describe('Connector', function() {
 				SuperName: name
 			};
 
-		Model.create(object, function(err, instance) {
+		Model.create(object, function (err, instance) {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 			should(instance.SuperName).equal(name);
@@ -101,19 +101,19 @@ describe('Connector', function() {
 
 	});
 
-	it('should be able to find an instance by ID', function(next) {
+	it('should be able to find an instance by ID', function (next) {
 
 		var name = 'TEST: Hello world',
 			object = {
 				Name: name
 			};
 
-		Model.create(object, function(err, instance) {
+		Model.create(object, function (err, instance) {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 
 			var id = instance.getPrimaryKey();
-			Model.find(id, function(err, instance2) {
+			Model.find(id, function (err, instance2) {
 				should(err).be.not.ok;
 				should(instance2).be.an.object;
 				should(instance2.getPrimaryKey()).equal(id);
@@ -125,19 +125,19 @@ describe('Connector', function() {
 
 	});
 
-	it('should be able to find an instance by field value', function(next) {
+	it('should be able to find an instance by field value', function (next) {
 
 		var name = 'TEST: Hello world',
 			object = {
 				Name: name
 			};
 
-		Model.create(object, function(err, instance) {
+		Model.create(object, function (err, instance) {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 
-			var options = { Name: name };
-			Model.find(options, function(err, coll) {
+			var options = {Name: name};
+			Model.find(options, function (err, coll) {
 				should(err).be.not.ok;
 				shouldContain(coll, instance);
 				instance.delete(next);
@@ -147,19 +147,19 @@ describe('Connector', function() {
 
 	});
 
-	it('should be able to find an instance by field comparison', function(next) {
+	it('should be able to find an instance by field comparison', function (next) {
 
 		var name = 'TEST: Hello world',
 			object = {
 				Name: name
 			};
 
-		Model.create(object, function(err, instance) {
+		Model.create(object, function (err, instance) {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 
-			var options = { where: { Name: { $like: name.split(' ')[0] + '%' } } };
-			Model.query(options, function(err, coll) {
+			var options = {where: {Name: {$like: name.split(' ')[0] + '%'}}};
+			Model.query(options, function (err, coll) {
 				should(err).be.not.ok;
 				shouldContain(coll, instance);
 				instance.delete(next);
@@ -169,7 +169,7 @@ describe('Connector', function() {
 
 	});
 
-	it('should be able to order, limit, skip while finding', function(next) {
+	it('should be able to order, limit, skip while finding', function (next) {
 
 		var name = 'TEST: Hello world',
 			limit = 3,
@@ -177,18 +177,18 @@ describe('Connector', function() {
 				Name: name
 			};
 
-		Model.create(object, function(err, instance) {
+		Model.create(object, function (err, instance) {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 
 			var options = {
-				where: { Name: { $like: 'TEST: Hello %' } },
-				sel: { Id: 1, Name: 1 },
-				order: { Id: 1, Name: 1 },
+				where: {Name: {$like: 'TEST: Hello %'}},
+				sel: {Id: 1, Name: 1},
+				order: {Id: 1, Name: 1},
 				limit: limit,
 				skip: 0
 			};
-			Model.query(options, function(err, coll) {
+			Model.query(options, function (err, coll) {
 				should(err).be.not.ok;
 				should(coll.length).be.below(limit + 1);
 				shouldContain(coll, instance);
@@ -199,24 +199,24 @@ describe('Connector', function() {
 
 	});
 
-	it('should be able to update an instance', function(next) {
+	it('should be able to update an instance', function (next) {
 
 		var name = 'TEST: Hello world',
 			object = {
 				Name: name
 			};
 
-		Model.create(object, function(err, instance) {
+		Model.create(object, function (err, instance) {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 
 			var id = instance.getPrimaryKey();
-			Model.findOne(id, function(err, instance2) {
+			Model.findOne(id, function (err, instance2) {
 				should(err).be.not.ok;
 
 				var newName = 'TEST: Goodbye world';
 				instance2.set('Name', newName);
-				instance2.save(function(err, result) {
+				instance2.save(function (err, result) {
 					should(err).be.not.ok;
 
 					should(result).be.an.object;
@@ -231,36 +231,36 @@ describe('Connector', function() {
 
 	});
 
-	it('API-377: should be able to query with just skip', function(callback) {
-		Model.query({}, function(err, coll1) {
+	it('API-377: should be able to query with just skip', function (callback) {
+		Model.query({}, function (err, coll1) {
 			should(err).be.not.ok;
 			should(coll1).be.ok;
-			Model.query({ skip: 1 }, function(err, coll2) {
+			Model.query({skip: 1}, function (err, coll2) {
 				should(err).be.not.ok;
 				should(coll2).be.ok;
 				callback();
 			});
 		});
 	});
-	
-	it('API-594: should error transparently when you try to $like query on a textarea', function (callback) {
+
+	(connector.config.username === 'luuwilson@gmail.com' ? it : it.skip)('API-594: should error transparently when you try to $like query on a textarea', function (callback) {
 		var Model = Arrow.createModel('salesforce__c', {
 			fields: {
-				fname: { type: String, required: true, name: 'First_Name__c' },
-				lname: { type: String, required: true, name: 'Last_Name__c' },
-				email: { type: String, required: true, name: 'Email__c' }
+				fname: {type: String, required: true, name: 'First_Name__c'},
+				lname: {type: String, required: true, name: 'Last_Name__c'},
+				email: {type: String, required: true, name: 'Email__c'}
 			},
 			connector: 'appc.salesforce'
 		});
 		Model.create([
-			{ fname: 'Fergie', lname: 'Flintstone', email: 'fergie@flintstones.com' },
-			{ fname: 'Wally', lname: 'West', email: 'flash@centralcity.com' },
-			{ fname: 'Bruce', lname: 'Wayne', email: 'batman@gotham.com' }
+			{fname: 'Fergie', lname: 'Flintstone', email: 'fergie@flintstones.com'},
+			{fname: 'Wally', lname: 'West', email: 'flash@centralcity.com'},
+			{fname: 'Bruce', lname: 'Wayne', email: 'batman@gotham.com'}
 		], created);
 
 		function created(err) {
 			should(err).be.not.ok;
-			Model.query({ where: { fname: { $like: "%a%" } } }, queried);
+			Model.query({where: {fname: {$like: "%a%"}}}, queried);
 		}
 
 		function queried(err) {
@@ -280,7 +280,6 @@ describe('Connector', function() {
 
 		before(function (cb) {
 			connector.config.requireSessionLogin = true;
-
 			server.start(function (err) {
 				assert.ifError(err);
 				cb();
@@ -380,11 +379,14 @@ describe('Connector', function() {
 	function deleteTestData(next) {
 		var temp = connector.config.requireSessionLogin;
 		connector.config.requireSessionLogin = false;
-		Model.find({ where: { Name: { $like: 'TEST: %' } }, limit: 100 }, function(err, coll) {
+		Model.query({where: {Name: {$like: 'TEST: %'}}, limit: 100}, function (err, coll) {
 			should(err).be.not.ok;
-			async.eachSeries(coll, function(instance, proceed) {
+			if (!coll) {
+				return next();
+			}
+			async.eachSeries(coll, function (instance, proceed) {
 				instance.delete(proceed);
-			}, function() {
+			}, function () {
 				connector.config.requireSessionLogin = temp;
 				next();
 			});

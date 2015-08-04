@@ -1,45 +1,43 @@
 {
-  "name": "appc.salesforce",
-  "description": "Salesforce connector",
-  "version": "1.0.38",
-  "author": "Jeff Haynie",
-  "license": "Apache-2.0",
-  "framework": "none",
-  "keywords": [
-    "arrow",
-    "arrow-connector",
-    "appc-cli-plugin",
-    "salesforce",
-    "appcelerator"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:appcelerator/appc.salesforce.git"
-  },
-  "scripts": {
-    "start": "appc install && node ./app.js",
-    "test": "grunt",
-    "preinstall": "node ./bin/update"
-  },
-  "private": true,
-  "dependencies": {
-    "async": "^0.9.0",
-    "jsforce": "1.4.1",
-    "lodash": "^2.4.1",
-    "moment": "^2.8.3",
-    "pkginfo": "^0.3.0"
-  },
-  "devDependencies": {
-    "arrow": "0.3.166",
-    "ensure-latest": "^1.0.3",
-    "grunt": "^0.4.5",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-kahvesi": "^0.1.0",
-    "grunt-mocha-test": "^0.12.0",
-    "mocha": "^1.21.4",
-    "request": "^2.53.0",
-    "should": "^4.0.4"
-  },
-  "ensureLatest": [ "arrow" ]
+	"name": "appc.salesforce",
+	"description": "Salesforce connector",
+	"version": "1.0.39",
+	"author": "Jeff Haynie",
+	"license": "Apache-2.0",
+	"framework": "none",
+	"keywords": [
+		"arrow",
+		"arrow-connector",
+		"appc-cli-plugin",
+		"salesforce",
+		"appcelerator"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:appcelerator/appc.salesforce.git"
+	},
+	"scripts": {
+		"start": "appc run",
+		"test": "./node_modules/nodemon/bin/nodemon.js --exec 'grunt' -e js,json"
+	},
+	"private": true,
+	"dependencies": {
+		"async": "^0.9.0",
+		"jsforce": "1.4.1",
+		"lodash": "^2.4.1",
+		"moment": "^2.8.3",
+		"pkginfo": "^0.3.0"
+	},
+	"devDependencies": {
+		"arrow": "^*",
+		"grunt": "^0.4.5",
+		"grunt-contrib-clean": "^0.6.0",
+		"grunt-contrib-jshint": "^0.11.2",
+		"grunt-kahvesi": "^0.2.4",
+		"grunt-mocha-test": "^0.12.7",
+		"mocha": "^2.2.5",
+		"nodemon": "^1.3.8",
+		"request": "^2.60.0",
+		"should": "^7.0.2"
+	}
 }

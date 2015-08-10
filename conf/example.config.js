@@ -23,6 +23,12 @@ module.exports = {
 			schemaRefresh: 3.6e+6 * 24, // how long the cache will live (one day); set to "false" to disable caching.
 			modelAutogen: false, // whether or not to generate APIs for the built-in Salesforce models.
 			generateModelsFromSchema: true // Generate models from your schema.
+
+			// If you only want to generate a couple of models from the schema, uncomment and customize the following:
+			/*generateModels: [
+				'Account',
+				'Contract'
+			]*/
 		}
 	}
 };

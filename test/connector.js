@@ -276,11 +276,14 @@ describe('Connector', function () {
 				password: ''
 			},
 			accessToken,
-			instanceUrl;
+			instanceUrl,
+			urlToHit;
 
 		before(function (cb) {
 			connector.config.requireSessionLogin = true;
+			connector.config.generateModels = [ 'account' ];
 			server.start(function (err) {
+				urlToHit = 'http://localhost:' + server.port + '/api/appc.salesforce/account/query?limit=2';
 				assert.ifError(err);
 				cb();
 			});
@@ -289,7 +292,7 @@ describe('Connector', function () {
 		it('should make sure auth is required', function makeSureAuthIsRequired(cb) {
 			request({
 				method: 'GET',
-				uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
+				uri: urlToHit,
 				auth: auth,
 				json: true
 			}, function (err, response, body) {
@@ -302,7 +305,7 @@ describe('Connector', function () {
 		it('should pass with valid auth params', function passGoodAuth(cb) {
 			request({
 				method: 'GET',
-				uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
+				uri: urlToHit,
 				auth: auth,
 				headers: {
 					user: connector.config.username,
@@ -322,7 +325,7 @@ describe('Connector', function () {
 		it('should pass with valid access token', function passGoodAccessToken(cb) {
 			request({
 				method: 'GET',
-				uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
+				uri: urlToHit,
 				auth: auth,
 				headers: {
 					accessToken: accessToken,
@@ -338,7 +341,7 @@ describe('Connector', function () {
 		it('should error with invalid access token', function passInvalidAccessToken(cb) {
 			request({
 				method: 'GET',
-				uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
+				uri: urlToHit,
 				auth: auth,
 				headers: {
 					accessToken: 'bad-access-token!',
@@ -355,7 +358,7 @@ describe('Connector', function () {
 		it('should error with invalid auth params', function passInvalidAuth(cb) {
 			request({
 				method: 'GET',
-				uri: 'http://localhost:' + server.port + '/api/appc.salesforce/account',
+				uri: urlToHit,
 				auth: auth,
 				headers: {
 					user: 'bad-user!',

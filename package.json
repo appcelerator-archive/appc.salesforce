@@ -1,7 +1,7 @@
 {
 	"name": "appc.salesforce",
 	"description": "Salesforce connector",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"author": "Jeff Haynie",
 	"license": "Apache-2.0",
 	"framework": "none",

@@ -28,10 +28,13 @@ module.exports = {
 			// Whether or not to generate APIs based on the methods in generated models. 
 			modelAutogen: false
 
+			// If you want to use a specific version of the Salesforce API, uncomment and customize the following:
+			// version: '26.0'
+
 			// If you only want to generate a couple of models from the schema, uncomment and customize the following:
 			/*generateModels: [
-			 'Account',
-			 'Contract'
+				'Account',
+				'Contract'
 			 ]*/
 		}
 	}

@@ -3,10 +3,10 @@ exports['delete'] = {
 	testDeleteAll: false,
 	insert: [
 		{
-			Name: 'Nolan Wright'
+			Name: 'TEST: Nolan Wright'
 		},
 		{
-			Name: 'Jeff Haynie'
+			Name: 'TEST: Jeff Haynie'
 		}
 	]
 };

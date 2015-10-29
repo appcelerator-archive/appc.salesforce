@@ -4,16 +4,16 @@ exports.query = {
 	iterations: 1, // To run this test multiple times (useful when you're caching results), increase this number.
 	insert: [
 		{
-			Name: 'Rick Blalock'
+			Name: 'TEST: Rick Blalock'
 		},
 		{
-			Name: 'Nolan Wright'
+			Name: 'TEST: Nolan Wright'
 		}
 	],
 	query: {
 		where: {
 			Name: {
-				$like: 'Nolan%'
+				$like: 'TEST: Nolan%'
 			}
 		}
 	},

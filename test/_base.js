@@ -6,6 +6,10 @@ var Arrow = require('arrow'),
 	}),
 	connector = server.getConnector('appc.salesforce');
 
+before(function (next) {
+	server.start(next);
+});
+
 global.Arrow = Arrow;
 global.server = server;
 global.connector = connector;

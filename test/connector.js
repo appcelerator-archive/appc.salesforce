@@ -282,11 +282,8 @@ describe('Connector', function () {
 		before(function (cb) {
 			connector.config.requireSessionLogin = true;
 			connector.config.generateModels = ['account'];
-			server.start(function (err) {
-				urlToHit = 'http://localhost:' + server.port + '/api/appc.salesforce/account/query?limit=2';
-				assert.ifError(err);
-				cb();
-			});
+			urlToHit = 'http://localhost:' + server.port + '/api/appc.salesforce/account/query?limit=2';
+			cb();
 		});
 
 		it('should make sure auth is required', function makeSureAuthIsRequired(cb) {

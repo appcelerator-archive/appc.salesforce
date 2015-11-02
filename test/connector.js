@@ -15,7 +15,7 @@ describe('Connector', function () {
 				Name: {type: String, required: false, validator: /[a-zA-Z]{3,}/},
 				Type: {type: String, readonly: true}
 			},
-			connector: 'appc.salesforce'
+			connector: 'appc.salesforce.1'
 		});
 
 		should(Model).be.an.object;
@@ -46,7 +46,13 @@ describe('Connector', function () {
 	});
 
 	it('should create models from schema', function () {
-		var Contract = connector.getModel('appc.salesforce/Contract');
+		var Contract = server.getModel('appc.salesforce.1/Contract');
+		should(Contract).be.ok;
+		should(Contract.generated).be.true;
+	});
+
+	it('should create models for multiple instances of the connector', function () {
+		var Contract = server.getModel('appc.salesforce.2/Contract');
 		should(Contract).be.ok;
 		should(Contract.generated).be.true;
 	});
@@ -85,7 +91,7 @@ describe('Connector', function () {
 			fields: {
 				SuperName: {name: 'Name', type: String}
 			},
-			connector: 'appc.salesforce'
+			connector: 'appc.salesforce.1'
 		});
 		var name = 'TEST: Hello world',
 			object = {
@@ -250,7 +256,7 @@ describe('Connector', function () {
 				lname: {type: String, required: true, name: 'Last_Name__c'},
 				email: {type: String, required: true, name: 'Email__c'}
 			},
-			connector: 'appc.salesforce'
+			connector: 'appc.salesforce.1'
 		});
 		Model.create([
 			{fname: 'Fergie', lname: 'Flintstone', email: 'fergie@flintstones.com'},
@@ -281,8 +287,7 @@ describe('Connector', function () {
 
 		before(function (cb) {
 			connector.config.requireSessionLogin = true;
-			connector.config.generateModels = ['account'];
-			urlToHit = 'http://localhost:' + server.port + '/api/appc.salesforce/account/query?limit=2';
+			urlToHit = 'http://localhost:' + server.port + '/api/appc.salesforce.1/account/query?limit=2';
 			cb();
 		});
 

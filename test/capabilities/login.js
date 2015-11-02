@@ -1,4 +1,4 @@
-var config = require('../../conf/local').connectors['appc.salesforce'];
+var config = require('../../conf/local').connectors['appc.salesforce.1'];
 
 exports.login = {
 	authenticationHeaders: ['user', 'pass', 'token'],

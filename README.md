@@ -56,6 +56,8 @@ node app.js
 
 ### Running Unit Tests
 
+Copy example.dev.config.js to local.js and update the login parameters with your own, then you can run the unit tests.
+
 ```bash
 npm test
 ```

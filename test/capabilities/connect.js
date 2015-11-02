@@ -1,5 +1,5 @@
 exports.connect = {
-	goodConfig: require('../../conf/local').connectors['appc.salesforce'],
+	goodConfig: require('../../conf/local').connectors['appc.salesforce.1'],
 	badConfig: {
 		requireSessionLogin: false,
 		url: 'https://test.salesforce.com/',

@@ -44,6 +44,44 @@ var Account = Arrow.createModel('account',{
 });
 ```
 
+### Authenticating Through Salesforce
+
+You can pass authentication through this connector on to Salesforce by changing the configuration. To get started,
+set `requireSessionLogin` to `true` for the Salesforce connector:
+
+```javascript
+module.exports = {
+	connectors: {
+		'appc.salesforce': {
+			...
+			requireSessionLogin: true
+			...
+		}
+	}
+};
+```
+
+This property allows you to configure whether or not anonymous requests can use your default account (specified in your
+configuration files) for connecting to Salesforce. Set this to "true" to require requests to specify their own
+credentials or their own session token (via the headers user, and pass, or accesstoken).
+
+With it set to true, call any of the REST APIs on a Salesforce model, such as Account.findAll, and provide credentials
+via headers:
+
+```bash
+curl --header "user: sfUsername" --header "pass: sfPassword" --header "token: sfToken" http://localhost:8080/api/appc.salesforce/account
+```
+
+Note that you can also use the "loginurl" header here, which will override what was specified in the configuration.
+
+The request will execute, and you will either get back an error if the login failed, or you will get the results of the 
+findAll query. You will also get back the headers "accesstoken" and "instanceurl". For future requests, pass these
+headers back instead of the user, pass, and token headers. This allows us to re-use the session.
+
+```bash
+curl --header "accesstoken: theAccessToken" --header "instanceurl: theInstanceURL" http://localhost:8080/api/appc.salesforce/account
+```
+
 ## Development
 
 > This section is for individuals developing the Salesforce Connector and not intended

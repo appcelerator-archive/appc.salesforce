@@ -36,7 +36,7 @@
 		"grunt-kahvesi-latest": "^0.2.5",
 		"grunt-mocha-test": "^0.12.7",
 		"mocha": "^2.2.5",
-		"request": "^2.60.0",
+		"request": "^2.66.0",
 		"should": "^7.0.2"
 	}
 }

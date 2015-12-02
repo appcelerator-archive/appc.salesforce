@@ -1,6 +1,6 @@
 var should = require('should');
 
-exports.findOne = {
+exports.findByID = {
 	iterations: 1, // To run this test multiple times (useful when you're caching results), increase this number.
 	insert: {
 		Name: 'TEST: Nolan Wright'

@@ -6,3 +6,4 @@ conf/schema.json
 *.tgz
 *.log
 coverage
+.vscode

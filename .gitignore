@@ -6,4 +6,3 @@ conf/schema.json
 *.tgz
 *.log
 coverage
-.vscode/launch.json

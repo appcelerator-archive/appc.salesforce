@@ -5,7 +5,7 @@ This is an Arrow connector to Salesforce.
 ## Installation
 
 ```bash
-$ appc install connector/appc.salesforce --save
+$ appc install connector/appc.salesforce
 ```
 
 You need to set the following configuration:

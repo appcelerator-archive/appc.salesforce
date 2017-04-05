@@ -4,7 +4,9 @@ var base = require('./_base'),
 	assert = require('assert'),
 	async = require('async'),
 	request = require('request'),
-	path = require('path');
+	path = require('path'),
+	fs = require('fs'),
+ 	os = require('os');
 
 describe('Connector', function () {
 	var Model;
@@ -376,6 +378,42 @@ describe('Connector', function () {
 		});
 
 	});
+
+	describe('generateSchema works properly', function () {
+		before(function (next) {
+			Model = Arrow.Model.extend('Account', {
+ 				fields: {
+ 				Name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ },
+ 					Type: { type: String, readonly: true }
+ 				},
+ 				connector: 'appc.salesforce.1'
+ 			});
+ 			deleteTestData(next);
+ 		});
+ 
+ 	
+ 
+ 		it('should work with schemaRefresh set to false and no schema', function (next) {
+ 			connector.config.schemaRefresh = false;
+ 			var confDir = connector.getCacheDir();
+ 			var hashedFilename = 'salesforce-schema-' + connector.md5((connector.config.generateModels || []).join('.') + connector.config.username + connector.config.token) + '.json';
+ 			var cachedFileName = path.join(confDir, hashedFilename);
+ 
+ 
+ 			if (fs.existsSync(cachedFileName)) {
+ 				fs.unlinkSync(cachedFileName);
+ 			}
+ 			(fs.existsSync(cachedFileName)).should.be.false();
+ 
+ 
+ 			connector.generateSchema(function (err, schema) {
+ 				(fs.existsSync(cachedFileName)).should.be.true();
+ 				should(err).be.not.ok;
+ 				should(schema).be.an.Object;
+ 				next();
+ 			});
+ 		});
+ 	});
 
 	/*
 	 Utility.

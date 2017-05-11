@@ -31,9 +31,7 @@ test('### Start Arrow ###', (t) => {
 test('### disconnect Call - OK Case ###', (t) => {
 	// Data
 	connector.sdkAPI = {
-		logout: () => {
-			return {}
-		}
+		logout: () => { }
 	}
 
 	// Stubs and spies

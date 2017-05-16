@@ -80,7 +80,7 @@ test('## findAll unit test - Error Case with the query method ###', function (t)
   const objectFieldsStub = sandbox.stub(utils, 'getObjectFields').callsFake((Model) => {
     return 'IsDeleted,MasterRecordId,Name'
   })
-  const parseErrorStub = sandbox.stub(utils, 'parseError').callsFake((err) => {
+  const parseErrorStub = sandbox.stub(utils, 'parseError').callsFake(() => {
     return 'Parsed error'
   })
   const queryStub = sandbox.stub(connector.sdkAPI, 'query').callsFake((query, callback) => {
@@ -99,6 +99,7 @@ test('## findAll unit test - Error Case with the query method ###', function (t)
   t.ok(objectFieldsStub.calledWith(Model))
   t.ok(parseErrorStub.calledOnce)
   t.ok(parseErrorStub.calledWith('Some error'))
+  t.ok(queryStub.calledOnce)
 
   t.end()
 })
@@ -142,7 +143,8 @@ test('## findAll unit test - OK Case ###', function (t) {
   t.ok(getRootModelNameStub.calledWith(Model))
   t.ok(objectFieldsStub.calledOnce)
   t.ok(objectFieldsStub.calledWith(Model))
-  t.ok(lodashStub.calledOnce)
+  t.ok(objectFieldsStub.calledOnce)
+  t.ok(queryStub.calledOnce)
   t.equals(lodashStub.firstCall.args[1], 'attributes')
 
   t.end()

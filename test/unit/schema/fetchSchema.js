@@ -9,14 +9,14 @@ const sandbox = sinon.sandbox
 
 test('## fetchSchema unit test - OK Case ###', function (t) {
     // Stubs and spies
-    sandbox.create()
-    const cbOkSpy = sandbox.spy()
+  sandbox.create()
+  const cbOkSpy = sandbox.spy()
 
     // Execution
-    fetchSchema.call(null, cbOkSpy)
+  fetchSchema(cbOkSpy)
 
     // Tests
-    t.ok(cbOkSpy.calledOnce)
-    sandbox.restore()
-    t.end()
+  t.ok(cbOkSpy.calledOnce)
+  sandbox.restore()
+  t.end()
 })

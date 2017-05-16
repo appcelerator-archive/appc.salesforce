@@ -10,7 +10,6 @@ const sandbox = sinon.sandbox
 
 var arrow
 var connector
-var Model
 
 mockery.enable({
   warnOnReplace: false,
@@ -39,7 +38,6 @@ test('### Start Arrow ###', (t) => {
     .then((inst) => {
       arrow = inst
       connector = arrow.getConnector('appc.salesforce.1')
-      Model = arrow.getModel('Posts')
       t.ok(arrow, 'Arrow has been started')
       t.end()
     })

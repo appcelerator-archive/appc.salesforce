@@ -8,69 +8,65 @@ const sandbox = sinon.sandbox
 
 var arrow
 var connector
-var Model
 
 tap.beforeEach((done) => {
-	sandbox.create()
-	done()
+  sandbox.create()
+  done()
 })
 
 tap.afterEach((done) => {
-	sandbox.restore()
-	done()
+  sandbox.restore()
+  done()
 })
 
 test('### Start Arrow ###', (t) => {
-	server()
-		.then((inst) => {
-			arrow = inst
-			connector = arrow.getConnector('appc.salesforce.1')
-			Model = arrow.getModel('Posts')
-			t.ok(arrow, 'Arrow has been started')
-			t.end()
-		})
-		.catch((err) => {
-			t.threw(err)
-		})
+  server()
+  .then((inst) => {
+    arrow = inst
+    connector = arrow.getConnector('appc.salesforce.1')
+    t.ok(arrow, 'Arrow has been started')
+    t.end()
+  })
+  .catch((err) => {
+    t.threw(err)
+  })
 })
 
 test('FindOne with console.warn', function (t) {
-	const logger = connector.logger
+  const logger = connector.logger
 
-	// Stubs and spies
-	const findByIdStub = sandbox.stub(connector.findByID, 'apply').callsFake((values) => { })
-	connector.logger = false
+  // Stubs and spies
+  const findByIdStub = sandbox.stub(connector.findByID, 'apply').callsFake((values) => { })
+  connector.logger = false
 
-	// Execution
-	findOne.call(connector)
+  // Execution
+  findOne.call(connector)
 
-	// Tests
-	t.ok(findByIdStub.calledOnce)
+  // Tests
+  t.ok(findByIdStub.calledOnce)
 
-	connector.logger = logger
-	t.end()
+  connector.logger = logger
+  t.end()
 })
 
 test('FindOne with logger', function (t) {
-	const logger = connector.logger
+  // Stubs and spies
+  const findByIdStub = sandbox.stub(connector.findByID, 'apply').callsFake((values) => { })
+  const loggerStub = sandbox.stub(connector.logger, 'warn').callsFake(() => { })
 
-	// Stubs and spies
-	const findByIdStub = sandbox.stub(connector.findByID, 'apply').callsFake((values) => { })
-	const loggerStub = sandbox.stub(connector.logger, 'warn').callsFake(() => { })
+  // Execution
+  findOne.call(connector)
 
-	// Execution
-	findOne.call(connector)
+  // Tests
+  t.ok(findByIdStub.calledOnce)
+  t.ok(loggerStub.calledOnce)
 
-	// Tests
-	t.ok(findByIdStub.calledOnce)
-	t.ok(loggerStub.calledOnce)
-
-	t.end()
+  t.end()
 })
 
 test('### Stop Arrow ###', (t) => {
-	arrow.stop(function () {
-		t.pass('Arrow has been stopped!')
-		t.end()
-	})
+  arrow.stop(function () {
+    t.pass('Arrow has been stopped!')
+    t.end()
+  })
 })

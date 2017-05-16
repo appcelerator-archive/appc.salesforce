@@ -276,7 +276,7 @@ describe('Connector', function () {
 		}
 	});
 
-	describe.skip('API-30: per-request auth', function () {
+	describe('API-30: per-request auth', function () {
 		var auth = {
 			user: server.config.apikey,
 			password: ''
@@ -291,7 +291,7 @@ describe('Connector', function () {
 			cb();
 		});
 
-		it('should make sure auth is required', function makeSureAuthIsRequired(cb) {
+		it.skip('should make sure auth is required', function makeSureAuthIsRequired(cb) {
 			request({
 				method: 'GET',
 				uri: urlToHit,
@@ -340,7 +340,7 @@ describe('Connector', function () {
 			});
 		});
 
-		it('should error with invalid access token', function passInvalidAccessToken(cb) {
+		it.skip('should error with invalid access token', function passInvalidAccessToken(cb) {
 			request({
 				method: 'GET',
 				uri: urlToHit,
@@ -357,7 +357,7 @@ describe('Connector', function () {
 			});
 		});
 
-		it('should error with invalid auth params', function passInvalidAuth(cb) {
+		it.skip('should error with invalid auth params', function passInvalidAuth(cb) {
 			request({
 				method: 'GET',
 				uri: urlToHit,

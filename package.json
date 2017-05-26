@@ -1,58 +1,59 @@
 {
-	"name": "appc.salesforce",
-	"description": "Salesforce connector",
-	"version": "2.0.0",
-	"author": "Jeff Haynie",
-	"license": "Apache-2.0",
-	"framework": "none",
-	"keywords": [
-		"arrow",
-		"arrow-connector",
-		"appc-cli-plugin",
-		"salesforce",
-		"appcelerator"
-	],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/appcelerator/appc.salesforce"
-	},
-	"private": true,
-	"dependencies": {
-		"async": "^1.5.0",
-		"jsforce": "1.5.0",
-		"lodash": "^3.10.1",
-		"semver": "^5.0.3",
-		"appc-connector-utils": "https://github.com/appcelerator/appc-connector-utils"
-	},
-	"devDependencies": {
-		"arrow": "^*",
-		"grunt": "^0.4.5",
-		"grunt-appc-js": "^1.0.19",
-		"grunt-contrib-clean": "^0.7.0",
-		"grunt-mocha-test": "^0.13.2",
-		"istanbul": "^0.4.1",
-		"nsp": "^2.6.3",
-		"nyc": "^10.2.0",
-		"mocha": "^2.3.4",
-		"mockery": "^2.0.0",
-		"request": "^2.60.0",
-		"should": "^7.0.2",
-		"tap": "^10.3.0",
-		"sinon": "^2.1.0"
-	},
-	"scripts": {
-		"start": "appc run",
-		"lint": "standard --fix",
-		"security": "retire --exitwith 0 --outputpath scan-retire.txt && nsp check --output writefile --warn-only",
-		"clean": "rimraf ./tmp",
-		"test": "npm run security && npm run test:unit && npm run clean",
-		"test:coverage": "nyc check-coverage --lines 90 --functions 85 --branches 85 --statements 90",
-		"test:unit": "tap ./test/unit/* --color --bail --coverage --coverage-report=html && npm run test:coverage",
-		"test:integration": "grunt"
-	},
-	"standard": {
-		"ignore": [
-			"test/integration/**"
-		]
-	}
+  "name": "appc.salesforce",
+  "description": "Salesforce connector",
+  "version": "2.0.0",
+  "author": "Jeff Haynie",
+  "license": "Apache-2.0",
+  "framework": "none",
+  "keywords": [
+    "arrow",
+    "arrow-connector",
+    "appc-cli-plugin",
+    "salesforce",
+    "appcelerator"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/appcelerator/appc.salesforce"
+  },
+  "private": true,
+  "dependencies": {
+    "async": "^1.5.0",
+    "jsforce": "1.5.0",
+    "lodash": "^3.10.1",
+    "semver": "^5.0.3",
+    "appc-connector-utils": "https://github.com/appcelerator/appc-connector-utils"
+  },
+  "devDependencies": {
+    "arrow": "^*",
+    "grunt": "^0.4.5",
+    "grunt-appc-js": "^1.0.19",
+    "grunt-contrib-clean": "^0.7.0",
+    "grunt-mocha-test": "^0.13.2",
+    "istanbul": "^0.4.1",
+    "mocha": "^2.3.4",
+    "mockery": "^2.0.0",
+    "nsp": "^2.6.3",
+    "nyc": "^10.2.0",
+    "request": "^2.60.0",
+    "rimraf": "^2.6.1",
+    "should": "^7.0.2",
+    "sinon": "^2.1.0",
+    "tap": "^10.3.0"
+  },
+  "scripts": {
+    "start": "appc run",
+    "lint": "standard --fix",
+    "security": "retire --exitwith 0 --outputpath scan-retire.txt && nsp check --output writefile --warn-only",
+    "clean": "rimraf ./tmp",
+    "test": "npm run security && npm run test:unit && npm run clean",
+    "test:coverage": "nyc check-coverage --lines 90 --functions 85 --branches 85 --statements 90",
+    "test:unit": "tap ./test/unit/* --color --bail --coverage --coverage-report=html && npm run test:coverage",
+    "test:integration": "grunt"
+  },
+  "standard": {
+    "ignore": [
+      "test/integration/**"
+    ]
+  }
 }

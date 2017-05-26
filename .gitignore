@@ -6,3 +6,6 @@ conf/schema.json
 *.tgz
 *.log
 coverage
+.nyc_output
+scan-retire.txt
+

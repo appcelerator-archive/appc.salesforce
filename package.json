@@ -46,7 +46,7 @@
 		"security": "retire --exitwith 0 --outputpath scan-retire.txt && nsp check --output writefile --warn-only",
 		"clean": "rimraf ./tmp",
 		"test": "npm run security && npm run test:unit && npm run clean",
-		"test:coverage": "nyc check-coverage --lines 95 --functions 95 --branches 85 --statements 95",
+		"test:coverage": "nyc check-coverage --lines 90 --functions 85 --branches 85 --statements 90",
 		"test:unit": "tap ./test/unit/* --color --bail --coverage --coverage-report=html && npm run test:coverage",
 		"test:integration": "grunt"
 	},

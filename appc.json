@@ -3,9 +3,9 @@
   "group": "arrow",
   "access": "public",
   "owners": [
-    "jhaynie@appcelerator.com",
-    "dtoth@appcelerator.com",
-    "mgoff@appcelerator.com"
+    "eruzhenov@axway.com",
+    "ptodorov@axway.com",
+    "mvasilev@axway.com"
   ],
   "assets": {
     "small_logo":"docs/registry-salesforce.png"

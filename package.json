@@ -2,7 +2,7 @@
   "name": "appc.salesforce",
   "description": "Salesforce connector",
   "version": "2.0.0",
-  "author": "Jeff Haynie",
+  "author": "Axway R&D",
   "license": "Apache-2.0",
   "framework": "none",
   "keywords": [

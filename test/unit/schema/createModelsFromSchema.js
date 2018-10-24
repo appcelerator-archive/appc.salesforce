@@ -1,19 +1,17 @@
 'use strict'
 
-const sinon = require('sinon')
+const sandbox = require('sinon')
 const tap = require('tap')
 const test = tap.test
 const mockery = require('mockery')
 const server = require('../../server')
-
-const sandbox = sinon.sandbox
 
 mockery.enable({
   warnOnReplace: false,
   warnOnUnregistered: false
 })
 
-const transformerStub = sinon.stub()
+const transformerStub = sandbox.stub()
 mockery.registerMock('../utils/transformer', transformerStub)
 
 const createModelsFromSchema = require('../../../lib/schema/createModelsFromSchema').createModelsFromSchema
@@ -22,7 +20,7 @@ var arrow
 var connector
 
 tap.beforeEach((done) => {
-  sandbox.create()
+  sandbox.createSandbox()
   done()
 })
 

@@ -5,7 +5,7 @@ const test = tap.test
 const fetchMetadata = require('./../../../lib/metadata/fetchMetadata').fetchMetadata
 const sinon = require('sinon')
 
-const sandbox = sinon.sandbox.create()
+const sandbox = sinon.createSandbox()
 
 test('### fetchMetadata test response, fields name, type and required ###', (t) => {
   // Spy

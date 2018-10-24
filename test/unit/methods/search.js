@@ -1,18 +1,16 @@
 'use strict'
 
-const sinon = require('sinon')
+const sandbox = require('sinon')
 const tap = require('tap')
 const test = tap.test
 const search = require('../../../lib/methods/search').search
 const server = require('../../server')
 
-const sandbox = sinon.sandbox
-
 var arrow
 var connector
 
 tap.beforeEach((done) => {
-  sandbox.create()
+  sandbox.createSandbox()
   done()
 })
 

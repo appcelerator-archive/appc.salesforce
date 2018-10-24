@@ -30,7 +30,7 @@ test('### disconnect Call - OK Case ###', (t) => {
   }
 
   // Stubs and spies
-  const sandbox = sinon.sandbox.create()
+  const sandbox = sinon.createSandbox()
   const cbSpy = sandbox.spy()
   const sdkAPIStub = sandbox.stub(connector.sdkAPI, 'logout').callsFake((callback) => {
     callback(null, {})

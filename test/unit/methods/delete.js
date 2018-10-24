@@ -1,20 +1,18 @@
 'use strict'
 
-const sinon = require('sinon')
+const sandbox = require('sinon')
 const tap = require('tap')
 const test = tap.test
 const deleteOne = require('../../../lib/methods/delete')['delete']
 const server = require('../../server')
 const utils = require('../../../lib/utils/index')
 
-const sandbox = sinon.sandbox
-
 var arrow
 var connector
 var Model
 
 tap.beforeEach((done) => {
-  sandbox.create()
+  sandbox.createSandbox()
   done()
 })
 

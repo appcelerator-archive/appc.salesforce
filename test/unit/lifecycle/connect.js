@@ -1,12 +1,11 @@
 'use strict'
 
-const sinon = require('sinon')
+const sandbox = require('sinon')
 const tap = require('tap')
 const test = tap.test
 const mockery = require('mockery')
 const server = require('../../server')
 
-const sandbox = sinon.sandbox
 
 var arrow
 var connector
@@ -24,7 +23,7 @@ mockery.registerMock('appc-connector-utils', sandbox.spy())
 var connect = require('../../../lib/lifecycle/connect').connect
 
 tap.beforeEach((done) => {
-  sandbox.create()
+  sandbox.createSandbox()
   done()
 })
 

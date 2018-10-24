@@ -1,17 +1,16 @@
 'use strict'
 
-const sinon = require('sinon')
+const sandbox = require('sinon')
 const tap = require('tap')
 const test = tap.test
 const jsforce = require('jsforce')
 const async = require('async')
-const sandbox = sinon.sandbox
 const mockery = require('mockery')
 
 const sdkFacade = require('../../../lib/utils/sdkFacade')
 
 tap.beforeEach((done) => {
-  sandbox.create()
+  sandbox.createSandbox()
   done()
 })
 

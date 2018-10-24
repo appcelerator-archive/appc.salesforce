@@ -1,15 +1,14 @@
 'use strict'
 
-const sinon = require('sinon')
+const sandbox = require('sinon')
 const tap = require('tap')
 const _ = require('lodash')
 const test = tap.test
 const transformer = require('../../../lib/utils/transformer')
 const utils = require('../../../lib/utils/index')
-const sandbox = sinon.sandbox
 
 tap.beforeEach((done) => {
-  sandbox.create()
+  sandbox.createSandbox()
   done()
 })
 
@@ -26,7 +25,7 @@ test('## transformer - OK Case ###', function (t) {
   const convertDataTypeToJSTypeStub = sandbox.stub(utils, 'convertDataTypeToJSType').callsFake((field, objectName) => {
     return {}
   })
-  const lodashObjectStub = sandbox.stub(_, 'object').callsFake((arr) => { return [] })
+  const lodashObjectStub = sandbox.stub(_, 'zipObject').callsFake((arr) => { return [] })
   const lodashMapStub = sandbox.stub(_, 'map').callsFake((collection, callback) => {
     const currentObject = {
       name: 'Account',

@@ -1,6 +1,6 @@
 'use strict'
 
-const sinon = require('sinon')
+const sandbox = require('sinon')
 const tap = require('tap')
 const test = tap.test
 const query = require('../../../lib/methods/query').query
@@ -9,14 +9,12 @@ const utils = require('../../../lib/utils/index')
 const _ = require('lodash')
 const Arrow = require('arrow')
 
-const sandbox = sinon.sandbox
-
 var arrow
 var connector
 var Model
 
 tap.beforeEach((done) => {
-  sandbox.create()
+  sandbox.createSandbox()
   done()
 })
 
